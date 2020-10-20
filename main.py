@@ -1,18 +1,68 @@
+import os
+import requests
+from flask import Flask
 import telebot
 from pycoingecko import CoinGeckoAPI
+from time import sleep
+from multiprocessing import Process
+import json
 
-bot = telebot.TeleBot('TOKEN')
+TOKEN = '1248180056:AAFnMlCgD4WaChjloUSQJWDlpjBkAUka6Z0'
+bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
+GROUP_ID = -455373776
+server = Flask(__name__)
+'''url = "https://api.telegram.org/bot1248180056:AAFpS1zYhkf3VxIld3Z10aH6di115PmwXF8/"
+URLA = "https://www.coingecko.com/en/yield-farming"
+
+def load_exchange():
+    return json.loads(requests.get(URLA).text)
+
+def get_updates_json(request):
+    response = requests.get(request + 'getUpdates')
+    return response.json()
+
+def last_update(data):
+    results = data['result']
+    total_updates = len(results) - 1
+    return results[total_updates]
+
+def get_chat_id(update):
+    chat_id = update['message']['chat']['id']
+    return chat_id
+
+chat_id = get_chat_id(last_update(get_updates_json(url)))'''
+
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Hello! Write /menu to see menu')
+    bot.send_message(message.chat.id, 'Hello! \nWrite /crypto to see cryptocurrency description.\n'
+                                      'Write /social to follow different channels.\n'
+                                      'Write /others to see other commands.')
+    print(message.chat.id)
 
-@bot.message_handler(commands=['menu'])
-def menu_message(message):
+
+@bot.message_handler(commands=['crypto'])
+def crypto_message(message):
     bot.send_message(message.chat.id, 'You can choose such commands: \n'
                                       '/bitcoin BTC description\n'
                                       '/ethereum ETH description\n'
-                                      '/rotten ROT description\n')
+                                      '/rotten ROT description\n'
+                                      '/ama AMA description\n'
+                                      '/nft NFTs description')
+
+@bot.message_handler(commands=['social'])
+def social_message(message):
+    bot.send_message(message.chat.id, 'You can choose such commands: \n'
+                                      '/twitter Follow twitter\n'
+                                      '/youtube Follow YouTube\n'
+                                      '/telegram Follow Telegram')
+
+@bot.message_handler(commands=['others'])
+def others_message(message):
+    bot.send_message(message.chat.id, 'You can choose such commands: \n'
+                                      '/r2b Ready to rumble proposal\n'
+                                      '/faq FAQ\n'
+                                      '/rules Rules')
 
 @bot.message_handler(commands=['bitcoin'])
 def bit_message(message):
@@ -56,7 +106,7 @@ def eth_message(message):
                                                                 total_vol, total_sup, market_cap,
                                                                 price_change_7d, circ_sup))
 
-@bot.message_handler(commands="rotten")
+@bot.message_handler(commands=["rotten"])
 def rot_message(message):
     usd = cg.get_price(ids='rotten', vs_currencies='usd')['rotten']['usd']
     eth = cg.get_price(ids='rotten', vs_currencies='eth')['rotten']['eth']
@@ -77,7 +127,10 @@ def rot_message(message):
                                       "Circulating / Total Supply: {6} / {7}\n"
                                       "Market Cap: {8}$".format(usd, btc, eth,
                                                                 price_24, price_7,
-                                                                total_vol, circ_sup,total_sup,market_cap))
+                                                                total_vol, circ_sup,total_sup,
+                                                                market_cap))
+
+
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
@@ -86,10 +139,23 @@ def send_text(message):
     elif message.text.lower() == 'bye':
         bot.send_message(message.chat.id, 'Прощай, создатель')
 
+
 @bot.message_handler(content_types=["new_chat_members"])
 def handler_new_member(message):
     first_name = message.new_chat_members[0].first_name
     bot.send_message(message.chat.id, "Glad to see you, {0}!".format(first_name))
 
+'''@bot.message_handler(content_types=['text'])
+def delete_links(message):
+    if message.text.lower() == 'dark':
+        bot.delete_message(message.chat.id, message.message_id)
+'''
+def ping():
+    while True:
+        bot.send_message(GROUP_ID, 'Testing message')
+        sleep(30*60)
+
 if __name__ == '__main__':
+    proc2 = Process(target=ping)
+    proc2.start()
     bot.polling(none_stop=True)
