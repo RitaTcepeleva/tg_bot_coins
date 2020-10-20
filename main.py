@@ -10,35 +10,14 @@ import json
 TOKEN = 'TOKEN'
 bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
-GROUP_ID = -455373776
-server = Flask(__name__)
-'''url = "https://api.telegram.org/bot1248180056:AAFpS1zYhkf3VxIld3Z10aH6di115PmwXF8/"
-URLA = "https://www.coingecko.com/en/yield-farming"
-
-def load_exchange():
-    return json.loads(requests.get(URLA).text)
-
-def get_updates_json(request):
-    response = requests.get(request + 'getUpdates')
-    return response.json()
-
-def last_update(data):
-    results = data['result']
-    total_updates = len(results) - 1
-    return results[total_updates]
-
-def get_chat_id(update):
-    chat_id = update['message']['chat']['id']
-    return chat_id
-
-chat_id = get_chat_id(last_update(get_updates_json(url)))'''
+GROUP_ID = "GROUP_ID"
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, 'Hello! \nWrite /crypto to see cryptocurrency description.\n'
                                       'Write /social to follow different channels.\n'
                                       'Write /others to see other commands.')
-    print(message.chat.id)
+    #print(message.chat.id)
 
 
 @bot.message_handler(commands=['crypto'])
