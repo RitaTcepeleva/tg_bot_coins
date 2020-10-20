@@ -7,7 +7,7 @@ from time import sleep
 from multiprocessing import Process
 import json
 
-TOKEN = '1248180056:AAFnMlCgD4WaChjloUSQJWDlpjBkAUka6Z0'
+TOKEN = 'TOKEN'
 bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
 GROUP_ID = -455373776
