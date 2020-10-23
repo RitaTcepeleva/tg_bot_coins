@@ -1,44 +1,23 @@
-import os
-import requests
-from flask import Flask
 import telebot
 from pycoingecko import CoinGeckoAPI
 from time import sleep
 from multiprocessing import Process
-import json
+import CurrencyPlot
 
 TOKEN = '1248180056:AAFnMlCgD4WaChjloUSQJWDlpjBkAUka6Z0'
 bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
-GROUP_ID = -455373776
-server = Flask(__name__)
-'''url = "https://api.telegram.org/bot1248180056:AAFpS1zYhkf3VxIld3Z10aH6di115PmwXF8/"
-URLA = "https://www.coingecko.com/en/yield-farming"
-
-def load_exchange():
-    return json.loads(requests.get(URLA).text)
-
-def get_updates_json(request):
-    response = requests.get(request + 'getUpdates')
-    return response.json()
-
-def last_update(data):
-    results = data['result']
-    total_updates = len(results) - 1
-    return results[total_updates]
-
-def get_chat_id(update):
-    chat_id = update['message']['chat']['id']
-    return chat_id
-
-chat_id = get_chat_id(last_update(get_updates_json(url)))'''
+#Bot testing
+GROUP_ID = -491104469
+#Test2
+#GROUP_ID = -455373776
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, 'Hello! \nWrite /crypto to see cryptocurrency description.\n'
                                       'Write /social to follow different channels.\n'
                                       'Write /others to see other commands.')
-    print(message.chat.id)
+    #print(message.chat.id)
 
 
 @bot.message_handler(commands=['crypto'])
@@ -70,7 +49,7 @@ def bit_message(message):
     bit_eth = cg.get_price(ids='bitcoin', vs_currencies='eth')['bitcoin']['eth']
     bit_circ_sup = cg.get_coins_markets(ids='bitcoin', vs_currency='usd')[0]['circulating_supply']
     bit_percent_24 = cg.get_coins_markets(ids='bitcoin', vs_currency='usd')[0]['price_change_percentage_24h']
-    price_change_7d = cg.get_coins_markets(ids='bitcoin', vs_currency='usd',price_change_percentage='7d')[0]['price_change_percentage_7d_in_currency']
+    price_change_7d = cg.get_coins_markets(ids='bitcoin', vs_currency='usd', price_change_percentage='7d')[0]['price_change_percentage_7d_in_currency']
     bit_total_volume = cg.get_coins_markets(ids='bitcoin', vs_currency='usd')[0]['total_volume']
     bit_total_supply = cg.get_coins_markets(ids='bitcoin', vs_currency='usd')[0]['total_supply']
     bit_market_cap = cg.get_coins_markets(ids='bitcoin', vs_currency='usd')[0]['market_cap']
@@ -130,6 +109,33 @@ def rot_message(message):
                                                                 total_vol, circ_sup,total_sup,
                                                                 market_cap))
 
+@bot.message_handler(commands=['etherplot'])
+def eth_plot(message):
+    CurrencyPlot.paint_plot('ethereum')
+    usd = cg.get_price(ids='ethereum', vs_currencies='usd')['ethereum']['usd']
+    img = open('foo.png', 'rb')
+    bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of ETH\n'
+                                                 'Current price: {0}$'.format(usd))
+    img.close()
+
+@bot.message_handler(commands=['aaveplot'])
+def aave_plot(message):
+    CurrencyPlot.paint_plot('aave')
+    usd = cg.get_price(ids='aave', vs_currencies='usd')['aave']['usd']
+    img = open('foo.png', 'rb')
+    bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of AAVE\n'
+                                                 'Current price: {0}$'.format(usd))
+    img.close()
+
+@bot.message_handler(commands=['compplot'])
+def comp_plot(message):
+    CurrencyPlot.paint_plot('compound-governance-token')
+    usd = cg.get_price(ids='compound-governance-token', vs_currencies='usd')['compound-governance-token']['usd']
+    img = open('foo.png', 'rb')
+    bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of COMP\n'
+                                                 'Current price: {0}$'.format(usd))
+    img.close()
+
 
 
 @bot.message_handler(content_types=['text'])
@@ -143,13 +149,9 @@ def send_text(message):
 @bot.message_handler(content_types=["new_chat_members"])
 def handler_new_member(message):
     first_name = message.new_chat_members[0].first_name
-    bot.send_message(message.chat.id, "Glad to see you, {0}!".format(first_name))
+    bot.send_message(message.chat.id, "Welcome, {0}!".format(first_name))
 
-'''@bot.message_handler(content_types=['text'])
-def delete_links(message):
-    if message.text.lower() == 'dark':
-        bot.delete_message(message.chat.id, message.message_id)
-'''
+
 def ping():
     while True:
         bot.send_message(GROUP_ID, 'Testing message')
