@@ -1,4 +1,5 @@
 import telebot
+import emoji
 from pycoingecko import CoinGeckoAPI
 from time import sleep
 from multiprocessing import Process
@@ -222,25 +223,25 @@ def handler_new_member(message):
 
 def ping():
     while True:
-        bot.send_message(GROUP_ID, 'Welcome to CurrySwap.com - The Worlds first HyFi staking Kitchen 👨‍🍳👨‍🌾\n\n'
+        bot.send_message(GROUP_ID, emoji.emojize('Welcome to CurrySwap.com - The Worlds first HyFi staking Kitchen:man_cook::man_farmer:\n\n'
                                    'Curryswap is a high yield Multi-Dapp ecosystem built specifically for high and sustainable returns.\n\n'
-                                   'Our products 🕹🎛 (Testnet is live!)\n\n'
-                                   '1.) CurryChef yield farming event 👩‍🌾: User stake LP tokens and earn CURRY rewards.\n\n'
-                                   '2.) Auction Lobby 🏦: Earn daily ETH rewards by simply staking your CURRY.\n\n'
-                                   '3.)  Static staking pool 💰: Stake CURRY tokens directly into a pool and earn higher APY.\n\n'
-                                   '4.) NFT Rewards 🦹🏿: Limited edition NFT tokens will be rewarded to users staking CURRY tokens.\n\n'
-                                   'What makes us unique 🧞‍♂️🧚‍♀️🧜‍♂️\n\n'
+                                   'Our products :joystick::control_knobs: (Testnet is live!)\n\n'
+                                   '1.) CurryChef yield farming event :woman_farmer:: User stake LP tokens and earn CURRY rewards.\n\n'
+                                   '2.) Auction Lobby :bank:: Earn daily ETH rewards by simply staking your CURRY.\n\n'
+                                   '3.)  Static staking pool :money_bag:: Stake CURRY tokens directly into a pool and earn higher APY.\n\n'
+                                   '4.) NFT Rewards :supervillain::dark_skin_tone:: Limited edition NFT tokens will be rewarded to users staking CURRY tokens.\n\n'
+                                   'What makes us unique :man_genie::woman_fairy::merman:\n\n'
                                    '- Multi-chain yield farming and staking. Farm on ETH, BNB & TRX! \n\n'
                                    '- Fully audited code ahead of launch. \n\n'
                                    '- Totally transparent and fair launch. \n\n'
                                    '- Full legal, marketing, business development and blockchain developers working on the project full time. \n\n'
                                    'Read more about us: https://medium.com/@curryswap/say-hello-to-curryswap-com-the-first-hyfi-staking-kitchen-1043a84c84f3\n\n'
-                                   'Important links 📱⌚️🖥\n\n'
+                                   'Important links :mobile_phone::watch::desktop_computer:\n\n'
                                    'Website: https://curryswap.com \n'
                                    'Telegram chat: https://t.me/curryswapchat\n'
                                    'Twitter: https://twitter.com/curryswap\n\n'
                                    'Testnet details in pinned message\n\n'
-                                   'For marketing, FAQs & business queries, please PM: @currychef')
+                                   'For marketing, FAQs & business queries, please PM: @currychef'))
         sleep(30*60)
 
 if __name__ == '__main__':
