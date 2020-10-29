@@ -7,13 +7,10 @@ import mycrawl
 import CurrencyPlot
 
 
-TOKEN = '1248180056:AAFnMlCgD4WaChjloUSQJWDlpjBkAUka6Z0'
+TOKEN = 'Token'
 bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
-#Bot testing
-#GROUP_ID = -491104469
-#Test2
-GROUP_ID = -455373776
+GROUP_ID = -XXXXXXXXXXXX
 
 
 @bot.message_handler(commands=['start'])
