@@ -161,6 +161,29 @@ def snx_message(message):
                                                  'Current price: {0}$'.format(usd))
     img.close()
 
+@bot.message_handler(commands=['crypto_list'])
+def crypto_graph(message):
+    msg = bot.send_message(message.chat.id, "if you want to get a cryptocoin chart" 
+                                            "\nWrite coin name"
+                                            "\nFor Example" 
+                                            "\nCardano"
+                                            "nBitcoin")
+    bot.register_next_step_handler(msg, coin_plot)
+
+# 3
+def coin_plot(message):
+    try:
+        userCoin = message.text
+        userCoin = userCoin.lower()
+        CurrencyPlot.paint_plot('{}'.format(userCoin))
+        usd = cg.get_price(ids='{}'.format(userCoin), vs_currencies='usd')['{}'.format(userCoin)]['usd']
+        img = open('foo.png', 'rb')
+        bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of {}n'
+                                                    'Current price {}$'.format(userCoin[0].upper() + userCoin[1],usd))
+        img.close()
+    except:
+        print('I cant')
+
 @bot.message_handler(commands=['yfi'])
 def yfi_message(message):
     CurrencyPlot.paint_plot('yearn-finance')
