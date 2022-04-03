@@ -7,10 +7,10 @@ import mycrawl
 import CurrencyPlot
 
 
-TOKEN = 'Token'
+TOKEN = 'TOKEN'
 bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
-GROUP_ID = -XXXXXXXXXXXX
+# GROUP_ID = -XXXXXXXXXXXX
 
 
 @bot.message_handler(commands=['start'])
@@ -160,6 +160,28 @@ def snx_message(message):
     bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of LINK\n'
                                                  'Current price: {0}$'.format(usd))
     img.close()
+
+@bot.message_handler(commands=['crypto_list'])
+def crypto_graph(message):
+    msg = bot.send_message(message.chat.id, "if you want to get a cryptocoin chart" 
+                                            "\nWrite coin name"
+                                            "\nFor Example" 
+                                            "\nCardano"
+                                            "\nBitcoin")
+    bot.register_next_step_handler(msg, coin_plot)
+
+def coin_plot(message):
+    try:
+        userCoin = message.text
+        userCoin = userCoin.lower()
+        CurrencyPlot.paint_plot('{}'.format(userCoin))
+        usd = cg.get_price(ids='{}'.format(userCoin), vs_currencies='usd')['{}'.format(userCoin)]['usd']
+        img = open('foo.png', 'rb')
+        bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of {}\n'
+                                                    'Current price {}$'.format(userCoin[0].upper() + userCoin[1:],usd))
+        img.close()
+    except:
+        print('I cant')
 
 @bot.message_handler(commands=['yfi'])
 def yfi_message(message):
