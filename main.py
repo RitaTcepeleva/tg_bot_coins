@@ -7,10 +7,10 @@ import mycrawl
 import CurrencyPlot
 
 
-TOKEN = 'Token'
+TOKEN = 'TOKEN'
 bot = telebot.TeleBot(TOKEN)
 cg = CoinGeckoAPI()
-GROUP_ID = -XXXXXXXXXXXX
+# GROUP_ID = -XXXXXXXXXXXX
 
 
 @bot.message_handler(commands=['start'])
@@ -167,10 +167,9 @@ def crypto_graph(message):
                                             "\nWrite coin name"
                                             "\nFor Example" 
                                             "\nCardano"
-                                            "nBitcoin")
+                                            "\nBitcoin")
     bot.register_next_step_handler(msg, coin_plot)
 
-# 3
 def coin_plot(message):
     try:
         userCoin = message.text
@@ -178,8 +177,8 @@ def coin_plot(message):
         CurrencyPlot.paint_plot('{}'.format(userCoin))
         usd = cg.get_price(ids='{}'.format(userCoin), vs_currencies='usd')['{}'.format(userCoin)]['usd']
         img = open('foo.png', 'rb')
-        bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of {}n'
-                                                    'Current price {}$'.format(userCoin[0].upper() + userCoin[1],usd))
+        bot.send_photo(message.chat.id, img, caption='Price of the last 7 days of {}\n'
+                                                    'Current price {}$'.format(userCoin[0].upper() + userCoin[1:],usd))
         img.close()
     except:
         print('I cant')
